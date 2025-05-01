@@ -16,10 +16,10 @@ describe('HomePageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HomePageComponent, 
         RouterModule.forRoot([
-          {path: 'newoffer', component: TestRouteComponent},
-          {path: 'acceptoffer', component: TestRouteComponent},
-          {path: 'completeoffer', component: TestRouteComponent},
-          {path: 'acceptdeal', component: TestRouteComponent}
+          {path: 'makeoffer', component: TestRouteComponent},
+          {path: 'findoffer', component: TestRouteComponent},
+          {path: 'findlion', component: TestRouteComponent},
+          {path: 'finddeal', component: TestRouteComponent}
         ])],
       providers: [
         provideLocationMocks()
@@ -52,47 +52,43 @@ describe('HomePageComponent', () => {
     const pillgroup = compiled.querySelector('div.pill-group')
     expect(pillgroup?.childElementCount).toEqual(4);
 
-    expect(pillgroup?.children[0].textContent).toContain('New Offer');
-    expect(pillgroup?.children[1].textContent).toContain('Accept Offer');
-    expect(pillgroup?.children[2].textContent).toContain('Complete Offer');
-    expect(pillgroup?.children[3].textContent).toContain('Accept Deal');
+    expect(pillgroup?.children[0].textContent).toContain('Make an Offer');
+    expect(pillgroup?.children[1].textContent).toContain('Find Offer');
+    expect(pillgroup?.children[2].textContent).toContain('Find Lion');
+    expect(pillgroup?.children[3].textContent).toContain('Find Deal');
   });
 
   it('new offer button should redirect', async() => {
     const pillgroup = compiled.querySelector('div.pill-group')
-    expect(pillgroup?.childElementCount).toEqual(4);
     pillgroup?.getElementsByTagName('a')[0].click();
     fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/newoffer");
+      expect(location.path()).toEqual("/makeoffer");
     });
   });
   
   it('accept offer button should redirect', async() => {
     const pillgroup = compiled.querySelector('div.pill-group')
-    expect(pillgroup?.childElementCount).toEqual(4);
     pillgroup?.getElementsByTagName('a')[1].click();
     fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/acceptoffer");
+      expect(location.path()).toEqual("/findoffer");
     });
   });
   
   it('complete offer button should redirect', async() => {
     const pillgroup = compiled.querySelector('div.pill-group')
-    expect(pillgroup?.childElementCount).toEqual(4);
     pillgroup?.getElementsByTagName('a')[2].click();
     const location = TestBed.inject(Location);
     fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/completeoffer");
+      expect(location.path()).toEqual("/findlion");
     });
   });
   
   it('accept deal button should redirect', async() => {
     const pillgroup = compiled.querySelector('div.pill-group')
-    expect(pillgroup?.childElementCount).toEqual(4);
     pillgroup?.getElementsByTagName('a')[3].click();
     const location = TestBed.inject(Location);
     fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/acceptdeal");
+      expect(location.path()).toEqual("/finddeal");
     });
   });
 });
