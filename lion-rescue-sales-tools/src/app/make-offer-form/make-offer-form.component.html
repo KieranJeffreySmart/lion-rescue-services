@@ -114,12 +114,24 @@
       background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
     }
 
+    .pill svg {
+      margin-inline-start: 0.25rem;
+    }
+
     .activebutton {
         box-shadow: inset 0 1px 0 0 #dcecfb;
         background: #bddbfa linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
         border: 1px solid #84bbf3;
         color: #ffffff;
         text-shadow: 0 1px 0 #528ecc;
+    }
+
+    .form-container {
+      margin-left: 20px;
+    }
+
+    .form-item {
+      padding: 10px;
     }
   
     @media screen and (max-width: 650px) {
@@ -136,19 +148,14 @@
       }
     }
   </style>
-<div>
+<div class="form-container">
     <h1>Make an offer</h1>
-    <div id="instructions">Enter your Sales Rep ID and read the escape service pitch before taking the Lion's details</div>
-    <div class="flex-container">
-        <div class="flex-item">
-            <label id="salesRepIdLbl" for="salesRepId">Sales Rep ID:</label>
-            <input type="text" id="salesRepId" placeholder="Sales Rep ID" [(ngModel)]="salesRepId" />
-        </div>
+    <div id="instructions">Don't forget to read the escape service pitch before taking the Lion's details</div>
         <button id="showPitch"
                 type="button"
                 class="btn pill"
                 placement="bottom"
-                ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                ngbPopover="Spare Me! Please let me go and some day I will surely repay you as my great Aunt Mabel saved the Lion king Bob from the clutches of an evil hunters trap. I too shall be your protector when you are in time of need"
                 popoverTitle="Popover on bottom"
     >
             <span>Show Pitch</span>
@@ -164,19 +171,24 @@
               />
             </svg>
         </button>
-        <div class="flex-item">
+    <div class="flex-container">
+        <div class="flex-item form-item">
+            <label id="salesRepIdLbl" for="salesRepId">Sales Rep ID:</label>
+            <input type="text" id="salesRepId" placeholder="Sales Rep ID" [(ngModel)]="salesRepId" />
+        </div>
+        <div class="flex-item form-item">
             <label id="emailLbl" for="email">Email:</label>
             <input type="text" id="email" placeholder="lion@email.com" [(ngModel)]="email" >
         </div>
-        <div class="flex-item">
+        <div class="flex-item form-item">
             <label id="firstNameLbl" for="firstName">First Name:</label>
             <input type="text" id="firstName" placeholder="First Name" [(ngModel)]="firstName" >
         </div>
-        <div class="flex-item">
+        <div class="flex-item form-item">
             <label id="lastNameLbl" for="lastName">Last Name:</label>
             <input type="text" id="lastName" placeholder="Last Name" [(ngModel)]="lastName" >
         </div>
-        <button id="submitOffer">
+        <button id="submitOffer" class="pill" (click)="submitOffer()">
             <span>Submit Offer</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -188,5 +200,4 @@
             </svg>
         </button>
     </div>
-    <div></div>
 </div>
