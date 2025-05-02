@@ -36,22 +36,21 @@ describe('MakeOfferFormComponent', () => {
     let showPitchButton = compiled.querySelector('button#showPitch') as HTMLButtonElement;
     expect(showPitchButton?.textContent).toContain('Show Pitch');
     expect(showPitchButton).toBeTruthy();
+
     let windowEl = compiled.querySelector('ngb-popover-window');
     expect(windowEl).toBeNull();
+
     showPitchButton?.dispatchEvent(new Event('click'));
-    tick();
+    tick();    
     windowEl = compiled.querySelector('ngb-popover-window');
     expect(windowEl).toBeTruthy();
     expect(compiled.querySelector('.popover-body')).toBeTruthy();
     expect(compiled.querySelector('.popover-body')?.textContent).toContain('Spare Me! Please let me go and some day I will surely repay you as my great Aunt Mabel saved the Lion king Bob from the clutches of an evil hunters trap. I too shall be your protector when you are in time of need'); 
     
+    showPitchButton = compiled.querySelector('button#showPitch') as HTMLButtonElement;
     showPitchButton?.dispatchEvent(new Event('click'));
     fixture.detectChanges();
     tick();
-    showPitchButton?.dispatchEvent(new Event('click'));
-    fixture.detectChanges();
-    tick();
-
     windowEl = compiled.querySelector('ngb-popover-window');
     //TODO: Get this working -- expect(windowEl).toBeNull();
 

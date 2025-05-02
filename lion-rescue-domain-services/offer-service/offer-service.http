@@ -1,0 +1,15 @@
+@offer_service_HostAddress = http://localhost:5026
+
+POST {{offer_service_HostAddress}}/offer/makeoffer
+Accept: application/json
+Content-Type: application/json
+
+{
+    "salesRepId": "Mabel1",
+    "email": "bobdeleon@king.com",
+    "firstName": "Bob",
+    "lastName": "DeLeon"
+}
+
+
+###
