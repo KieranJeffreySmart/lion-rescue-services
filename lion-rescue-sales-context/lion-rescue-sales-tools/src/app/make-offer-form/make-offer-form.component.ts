@@ -26,7 +26,7 @@ export class MakeOfferFormComponent {
     offer.firstName = this.firstName;
     offer.lastName = this.lastName;
 
-    this.http.post('/offer/makeoffer', offer).subscribe((response) => {
+    this.http.post('offers/makeoffer', offer).subscribe((response) => {
       console.log('Offer submitted successfully', response);
     });
   }

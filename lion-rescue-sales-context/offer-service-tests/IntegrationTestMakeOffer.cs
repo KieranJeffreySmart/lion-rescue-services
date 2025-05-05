@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Reflection;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
@@ -43,8 +41,9 @@ public class IntegrationTestMakeOffer: IClassFixture<WebApplicationFactory<Progr
 
         var content = JsonContent.Create(newOffer);
 
-
-        var response = await client.PostAsync("/offer/makeoffer", content);
+        var beforeRequest = DateTime.UtcNow;
+        var response = await client.PostAsync("/offers/makeoffer", content);
+        var afterRequest = DateTime.UtcNow;
 
         response.EnsureSuccessStatusCode();
         Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType?.ToString());
@@ -52,8 +51,14 @@ public class IntegrationTestMakeOffer: IClassFixture<WebApplicationFactory<Progr
         OfferDto responseBody = (await response.Content.ReadFromJsonAsync<OfferDto>(options)) ?? throw new Exception("Failed to deserialize response body");
 
         responseBody.ShouldNotBeNull();
-        responseBody.ShouldBeEquivalentTo(new OfferDto("123",  "jd@email.com",  "John",  "Doe"));            
+        Guid.TryParse(responseBody.OfferId, out Guid _).ShouldBeTrue();
+        responseBody.SalesRepId.ShouldBe("123");
+        responseBody.Email.ShouldBe("jd@email.com");
+        responseBody.FirstName.ShouldBe("John");
+        responseBody.LastName.ShouldBe("Doe");
+        responseBody.SubmittedOn.ShouldBeLessThan(afterRequest);
+        responseBody.SubmittedOn.ShouldBeGreaterThan(beforeRequest);
     }
 
-    public record OfferDto(string salesRepId, string email, string firstName, string lastName);
+    public record OfferDto(string OfferId, string SalesRepId, string Email, string FirstName, string LastName, DateTime SubmittedOn, DateTime ModifiedOn);
 }
