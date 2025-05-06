@@ -27,14 +27,22 @@ Increasing the chance of a Lions survival by 200%
 ## Results of EventStorming:
 **_NOTE:_** The model is a "work in progress" as I discover more about the application through implementation I might return to this model to update it before making large changes
 
-### The Model
-![image](MakeAnOfferBusinessProcess-Model.jpg)
+### Making an Offer Businesss Process
+#### The Model
+This is essentially a flow diagram detailing a specific scenario, as described by the story and discovered through EventStorming
+![image](MakeAnOffer-Model.jpg)
 
-### The flow fo messages and the assignment of responsibility
-![image](MakeAnOfferBusinessProcess-FlowandSNAP.jpg)
+#### The Boris
+This is another form of flow diagram but this time highlighting the relationships between components   
+The full diagram includes notifications, this helps to understand the diffrence between a process being notifcation driven or event driven
+![image](MakeAnOffer-Boris.jpg)
 
+This version of the Boris diagram has had policies and commands removed in an effort to make it more readable
+![image](MakeAnOffer-Boris.jpg)
 
-
+#### The SNAP
+This is a table of responsibilities for each object in the business process and provides a template for implementing applications
+![image](MakeAnOffer-SNAP.jpg)
 
 ## Lion Rescue Sales Context
 This context will be where we implement the logic for initiating a sale of rescue services
