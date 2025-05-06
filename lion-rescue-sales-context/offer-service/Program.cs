@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using offer_service.SalesContext;
 
 namespace offer_service;
 public class Program
@@ -8,13 +9,28 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add .Net Aspire Service Defaults
+        // Add .Net Aspire
         builder.AddServiceDefaults();
 
+        
+        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? builder.Environment.EnvironmentName;
+
+        if (environmentName == "test")
+        {
+            builder.Services.AddDbContext<SalesDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+        }
+        else
+        {
+            builder.AddNpgsqlDbContext<SalesDbContext>(connectionName: "postgresdb");
+        }
+        
         // Add services to the container.
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddTransient<IOfferStore, EFOfferStore>();
+        builder.Services.AddTransient<ISalesRepStore, EFSalesRepStore>();
 
         var app = builder.Build();
 
@@ -25,12 +41,21 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        var offerStore = new EFOfferStore(new OfferDbContext(new DbContextOptionsBuilder<OfferDbContext>().UseInMemoryDatabase("TestDb").Options));
-
         // app.UseHttpsRedirection();
-        app.MapPost("offers/makeoffer", async ([FromBody] NewOfferDto newOffer) =>
+        app.MapPost("offers/makeoffer", async ([FromServices] IOfferStore offerStore, [FromServices] ISalesRepStore salesRepStore, [FromBody] NewOfferDto newOffer) =>
         {   
-            var offer = await offerStore.CreateOffer(Offer.NewOffer(newOffer));
+            if (string.IsNullOrWhiteSpace(newOffer.SalesRepId) || string.IsNullOrWhiteSpace(newOffer.Email) || string.IsNullOrWhiteSpace(newOffer.FirstName) || string.IsNullOrWhiteSpace(newOffer.LastName))
+            {
+                return Results.BadRequest("SalesRepId, Email, FirstName and LastName are required.");
+            }
+
+   
+            if ((await salesRepStore.SalesRepExists(newOffer.SalesRepId)) == false)
+            {
+                return Results.BadRequest($"SalesRep with ID {newOffer.SalesRepId} does not exist.");
+            }
+
+            var offer = await offerStore.CreateOffer(OfferFactory.NewOffer(newOffer));
             return Results.Ok(offer);
         })
         .WithName("MakeOffer")
@@ -42,28 +67,18 @@ public class Program
 
 public record NewOfferDto(string SalesRepId = "", string Email = "", string FirstName = "", string LastName = "");
 
-
-public interface IOfferStore 
+internal static class OfferFactory
 {
-    public Task<Offer> GetOffer(string offerId);
-    public Task<Offer> CreateOffer(Offer offer);
-    public Task<Offer> UpdateOffer(Offer offer);
-    public Task DeleteOffer(string offerId);
-}
-
-public class Offer(string offerId, string salesRepId, string email, string firstName, string lastName, DateTime submittedOn, DateTime modifiedOn)
-{
-    public string OfferId { get; set; } = offerId;
-
-    public string SalesRepId { get; set; } = salesRepId;
-    public string Email { get; set; } = email;
-    public string FirstName { get; set; } = firstName;
-    public string LastName { get; set; } = lastName;
-    public DateTime SubmittedOn { get; set; } = submittedOn;
-    public DateTime ModifiedOn { get; set; } = modifiedOn;
-
-    public static Offer NewOffer(NewOfferDto newoffer)
+    public static Offer NewOffer(NewOfferDto newOffer)
     {
-        return new Offer(Guid.NewGuid().ToString(), newoffer.SalesRepId, newoffer.Email, newoffer.FirstName, newoffer.LastName, DateTime.UtcNow, DateTime.UtcNow);
+        return new Offer(
+            offerId: Guid.NewGuid().ToString(),
+            salesRepId: newOffer.SalesRepId,
+            email: newOffer.Email,
+            firstName: newOffer.FirstName,
+            lastName: newOffer.LastName,
+            submittedOn: DateTime.UtcNow,
+            modifiedOn: DateTime.UtcNow
+        );
     }
 }
