@@ -92,7 +92,7 @@ describe('MakeOfferFormComponent', () => {
     submitButton?.click();
     tick();
 
-    const req = httpTesting.expectOne('/offer/makeoffer', 'Request to load the configuration');
+    const req = httpTesting.expectOne('offers/makeoffer', 'Request to load the configuration');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toBeTruthy();
     expect(req.request.body.salesRepId).toEqual("Mabel");

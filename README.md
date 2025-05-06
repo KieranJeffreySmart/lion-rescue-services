@@ -25,7 +25,7 @@ The lion has an effective way of requesting help,
 Increasing the chance of a Lions survival by 200%  
 
 ## Results of EventStorming:
-**_NOTE:_** The model is a "work in progress" as I discover more about the application through implementation i might return to this model to update it before making large changes
+**_NOTE:_** The model is a "work in progress" as I discover more about the application through implementation I might return to this model to update it before making large changes
 
 ### The Model
 ![image](MakeAnOfferBusinessProcess-Model.jpg)

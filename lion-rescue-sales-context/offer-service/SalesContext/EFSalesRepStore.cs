@@ -40,6 +40,6 @@ public class EFSalesRepStore : ISalesRepStore
 
     public async Task<bool> SalesRepExists(string salesRepId)
     {
-        return (await _dbContext.SalesReps.FindAsync(salesRepId)) == null;
+        return (await _dbContext.SalesReps.FindAsync(salesRepId)) != null;
     }
 }
