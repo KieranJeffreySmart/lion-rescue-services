@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
 import { Location } from '@angular/common';
@@ -52,43 +52,41 @@ describe('HomePageComponent', () => {
     const pillgroup = compiled.querySelector('div.pill-group')
     expect(pillgroup?.childElementCount).toEqual(4);
 
-    expect(pillgroup?.children[0].textContent).toContain('Make an Offer');
+    expect(pillgroup?.children[0].textContent).toContain('Make Offer');
     expect(pillgroup?.children[1].textContent).toContain('Find Offer');
     expect(pillgroup?.children[2].textContent).toContain('Find Lion');
     expect(pillgroup?.children[3].textContent).toContain('Find Deal');
   });
 
-  it('new offer button should redirect', async() => {
+  it('new offer button should redirect', <any>fakeAsync(() => {
     const pillgroup = compiled.querySelector('div.pill-group')
     pillgroup?.getElementsByTagName('a')[0].click();
-    fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/makeoffer");
-    });
-  });
+    tick();
+    fixture.detectChanges();
+    expect(location.path()).toEqual("/makeoffer");
+  }));
   
-  it('accept offer button should redirect', async() => {
+  it('accept offer button should redirect', <any>fakeAsync(() => {
     const pillgroup = compiled.querySelector('div.pill-group')
     pillgroup?.getElementsByTagName('a')[1].click();
-    fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/findoffer");
-    });
-  });
+    tick();
+    fixture.detectChanges();
+    expect(location.path()).toEqual("/findoffer");
+  }));
   
-  it('complete offer button should redirect', async() => {
+  it('complete offer button should redirect', <any>fakeAsync(() => {
     const pillgroup = compiled.querySelector('div.pill-group')
     pillgroup?.getElementsByTagName('a')[2].click();
-    const location = TestBed.inject(Location);
-    fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/findlion");
-    });
-  });
+    tick();
+    fixture.detectChanges();
+    expect(location.path()).toEqual("/findlion");
+  }));
   
-  it('accept deal button should redirect', async() => {
+  it('accept deal button should redirect', <any>fakeAsync(() => {
     const pillgroup = compiled.querySelector('div.pill-group')
     pillgroup?.getElementsByTagName('a')[3].click();
-    const location = TestBed.inject(Location);
-    fixture.whenStable().then(() => {
-      expect(location.path()).toEqual("/finddeal");
-    });
-  });
+    tick();
+    fixture.detectChanges();
+    expect(location.path()).toEqual("/finddeal");
+  }));
 });

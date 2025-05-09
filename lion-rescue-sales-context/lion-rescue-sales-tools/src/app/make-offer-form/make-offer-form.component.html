@@ -151,53 +151,25 @@
 <div class="form-container">
     <h1>Make an offer</h1>
     <div id="instructions">Don't forget to read the escape service pitch before taking the Lion's details</div>
-        <button id="showPitch"
-                type="button"
-                class="btn pill"
-                placement="bottom"
-                ngbPopover="Spare Me! Please let me go and some day I will surely repay you as my great Aunt Mabel saved the Lion king Bob from the clutches of an evil hunters trap. I too shall be your protector when you are in time of need"
-                popoverTitle="Popover on bottom"
-    >
-            <span>Show Pitch</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="14"
-              viewBox="0 -960 960 960"
-              width="14"
-              fill="currentColor"
-            >
-              <path
-                d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"
-              />
-            </svg>
-        </button>
-    <div class="flex-container">
-        <div class="flex-item form-item">
-            <label id="salesRepIdLbl" for="salesRepId">Sales Rep ID:</label>
-            <input type="text" id="salesRepId" placeholder="Sales Rep ID" [(ngModel)]="salesRepId" />
-        </div>
-        <div class="flex-item form-item">
-            <label id="emailLbl" for="email">Email:</label>
-            <input type="text" id="email" placeholder="lion@email.com" [(ngModel)]="email" >
-        </div>
-        <div class="flex-item form-item">
-            <label id="firstNameLbl" for="firstName">First Name:</label>
-            <input type="text" id="firstName" placeholder="First Name" [(ngModel)]="firstName" >
-        </div>
-        <div class="flex-item form-item">
-            <label id="lastNameLbl" for="lastName">Last Name:</label>
-            <input type="text" id="lastName" placeholder="Last Name" [(ngModel)]="lastName" >
-        </div>
-        <button id="submitOffer" class="pill" (click)="submitOffer()">
-            <span>Submit Offer</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="14"
-              viewBox="0 -960 960 960"
-              width="14"
-              fill="currentColor"
-            >
-            </svg>
-        </button>
-    </div>
+      <button id="showPitch"
+          type="button"
+          class="btn pill"
+          placement="bottom"
+          ngbPopover="Spare Me! Please let me go and some day I will surely repay you as my great Aunt Mabel saved the Lion king Bob from the clutches of an evil hunters trap. I too shall be your protector when you are in time of need"
+          popoverTitle="Popover on bottom"
+      >
+          <span>Show Pitch</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="14"
+            viewBox="0 -960 960 960"
+            width="14"
+            fill="currentColor"
+          >
+            <path
+              d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"
+            />
+          </svg>
+      </button>
+   <app-new-offer-form />
 </div>

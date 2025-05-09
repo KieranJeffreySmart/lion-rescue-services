@@ -41,7 +41,7 @@ describe('MakeOfferFormComponent', () => {
     expect(windowEl).toBeNull();
 
     showPitchButton?.dispatchEvent(new Event('click'));
-    tick();    
+    tick();
     windowEl = compiled.querySelector('ngb-popover-window');
     expect(windowEl).toBeTruthy();
     expect(compiled.querySelector('.popover-body')).toBeTruthy();
@@ -53,51 +53,8 @@ describe('MakeOfferFormComponent', () => {
     tick();
     windowEl = compiled.querySelector('ngb-popover-window');
     //TODO: Get this working -- expect(windowEl).toBeNull();
-
-    expect(compiled.querySelector('label#salesRepIdLbl')?.textContent).toContain('Sales Rep ID');
-    let salesRedIdInput = compiled.querySelector('input#salesRepId') as HTMLInputElement 
-    expect(salesRedIdInput?.getAttribute('placeholder')).toContain('Sales Rep ID');
-    expect(salesRedIdInput?.getAttribute('type')).toContain('text');
-
-    expect(compiled.querySelector('label#emailLbl')?.textContent).toContain('Email');
-    let emailInput = compiled.querySelector('input#email') as HTMLInputElement 
-    expect(emailInput?.getAttribute('placeholder')).toContain('lion@email.com');
-    expect(emailInput?.getAttribute('type')).toContain('text');
-
-    expect(compiled.querySelector('label#firstNameLbl')?.textContent).toContain('First Name');
-    let firstNameInput = compiled.querySelector('input#firstName') as HTMLInputElement 
-    expect(firstNameInput?.getAttribute('placeholder')).toContain('First Name');
-    expect(firstNameInput?.getAttribute('type')).toContain('text');
-
-    expect(compiled.querySelector('label#lastNameLbl')?.textContent).toContain('Last Name');
-    let lastNameInput = compiled.querySelector('input#lastName') as HTMLInputElement 
-    expect(lastNameInput?.getAttribute('placeholder')).toContain('Last Name');
-    expect(lastNameInput?.getAttribute('type')).toContain('text');
     
-    const httpTesting = TestBed.inject(HttpTestingController);
-    let submitButton = compiled.querySelector('button#submitOffer') as HTMLButtonElement;
-    expect(submitButton?.textContent).toContain('Submit Offer');
-    expect(submitButton).toBeTruthy();
-
-
-    salesRedIdInput.value = "Mabel";
-    salesRedIdInput.dispatchEvent(new Event('input'));
-    emailInput.value = "bobdeleon@lionking.com";
-    emailInput.dispatchEvent(new Event('input'));
-    firstNameInput.value = "Bob";
-    firstNameInput.dispatchEvent(new Event('input'));
-    lastNameInput.value = "DeLeon";
-    lastNameInput.dispatchEvent(new Event('input'));
-
-    submitButton?.click();
-    tick();
-
-    const req = httpTesting.expectOne('offers/makeoffer', 'Request to load the configuration');
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toBeTruthy();
-    expect(req.request.body.salesRepId).toEqual("Mabel");
-    expect(req.request.body.email).toEqual("bobdeleon@lionking.com");
-    expect(req.request.body.firstName).toEqual("Bob");
-    expect(req.request.body.lastName).toEqual("DeLeon");
+    let newOfferForm = compiled.querySelector('form#makeOfferForm') as HTMLButtonElement;
+    expect(newOfferForm).toBeTruthy();
   }));
 });

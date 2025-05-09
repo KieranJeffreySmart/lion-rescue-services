@@ -15,7 +15,7 @@ public class Program
         
         var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? builder.Environment.EnvironmentName;
 
-        if (environmentName == "test")
+        if (environmentName == "test" ||  environmentName == "Development")
         {
             builder.Services.AddDbContext<SalesDbContext>(options => options.UseInMemoryDatabase("TestDb"));
         }
