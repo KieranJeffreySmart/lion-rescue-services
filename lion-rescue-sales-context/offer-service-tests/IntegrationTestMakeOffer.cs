@@ -24,6 +24,16 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
     [Fact]
     public async Task SuccessfullMakeOffer()
     {
+        // Given I have a new offer with valid data
+        var newOffer = new NewOfferDto
+        {
+            SalesRepId = "SalesRep01",
+            Email = "jd@email.com",
+            FirstName = "John",
+            LastName = "Doe"
+        };
+
+        // When I submit the new offer
         var client = _factory.CreateClient();
         var options = new JsonSerializerOptions()
         {
@@ -34,23 +44,14 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
             Converters = { new JsonStringEnumConverter() }
         };
 
-        var newOffer = new NewOfferDto
-        {
-            SalesRepId = "SalesRep01",
-            Email = "jd@email.com",
-            FirstName = "John",
-            LastName = "Doe"
-        };
-
         var content = JsonContent.Create(newOffer);
-
         var beforeRequest = DateTime.UtcNow;
         var response = await client.PostAsync("/offers/makeoffer", content);
         var afterRequest = DateTime.UtcNow;
 
+        // Then I should receive back a completed offer with an Id and created and modified dates
         response.EnsureSuccessStatusCode();
         Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType?.ToString());
-
         OfferDto responseBody = (await response.Content.ReadFromJsonAsync<OfferDto>(options)) ?? throw new Exception("Failed to deserialize response body");
 
         responseBody.ShouldNotBeNull();
@@ -61,6 +62,9 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         responseBody.LastName.ShouldBe("Doe");
         responseBody.SubmittedOn.ShouldBeLessThan(afterRequest);
         responseBody.SubmittedOn.ShouldBeGreaterThan(beforeRequest);
+
+        // And a new offer event should be raised
+
     }
 
     [Theory]
@@ -106,6 +110,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
+
     public record OfferDto(string OfferId, string SalesRepId, string Email, string FirstName, string LastName, DateTime SubmittedOn, DateTime ModifiedOn);
 }
 
@@ -113,7 +118,6 @@ public class CustomWebApplicationFactory<TProgram>: WebApplicationFactory<TProgr
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        // Works for: builder.Environment.EnvironmentName in Program.cs
-        builder.UseEnvironment("test"); 
+        Environment.SetEnvironmentVariable("DB_CONNECTION_TYPE", "InMemory");
     }
 }

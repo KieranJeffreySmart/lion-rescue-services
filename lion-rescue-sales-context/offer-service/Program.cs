@@ -12,10 +12,8 @@ public class Program
         // Add .Net Aspire
         builder.AddServiceDefaults();
 
-        
-        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? builder.Environment.EnvironmentName;
-
-        if (environmentName == "test" ||  environmentName == "Development")
+        var connectionType = Environment.GetEnvironmentVariable("DB_CONNECTION_TYPE") ?? "postgres";
+        if (connectionType == "InMemory")
         {
             builder.Services.AddDbContext<SalesDbContext>(options => options.UseInMemoryDatabase("TestDb"));
         }
