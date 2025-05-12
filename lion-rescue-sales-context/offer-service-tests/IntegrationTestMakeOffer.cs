@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
-using Microsoft.AspNetCore.Hosting;
+using MassTransit.Testing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using offer_service;
@@ -15,7 +15,7 @@ namespace offer_service_tests;
 
 public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    WebApplicationFactory<Program> _factory;
+    CustomWebApplicationFactory<Program> _factory;
     public IntegrationTestMakeOffer(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
@@ -49,7 +49,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         var response = await client.PostAsync("/offers/makeoffer", content);
         var afterRequest = DateTime.UtcNow;
 
-        // Then I should receive back a completed offer with an Id and created and modified dates
+        // Then I should receive a completed offer with an Id and created and modified dates
         response.EnsureSuccessStatusCode();
         Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType?.ToString());
         OfferDto responseBody = (await response.Content.ReadFromJsonAsync<OfferDto>(options)) ?? throw new Exception("Failed to deserialize response body");
@@ -64,7 +64,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         responseBody.SubmittedOn.ShouldBeGreaterThan(beforeRequest);
 
         // And a new offer event should be raised
-
+        _factory.NewOfferEventList.GetAll().ShouldNotBeEmpty();
     }
 
     [Theory]
@@ -114,10 +114,4 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
     public record OfferDto(string OfferId, string SalesRepId, string Email, string FirstName, string LastName, DateTime SubmittedOn, DateTime ModifiedOn);
 }
 
-public class CustomWebApplicationFactory<TProgram>: WebApplicationFactory<TProgram> where TProgram : class
-{
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        Environment.SetEnvironmentVariable("DB_CONNECTION_TYPE", "InMemory");
-    }
-}
+

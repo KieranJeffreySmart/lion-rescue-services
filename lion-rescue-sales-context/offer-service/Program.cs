@@ -1,3 +1,5 @@
+using System.Reflection;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using offer_service.SalesContext;
@@ -29,6 +31,34 @@ public class Program
 
         builder.Services.AddTransient<IOfferStore, EFOfferStore>();
         builder.Services.AddTransient<ISalesRepStore, EFSalesRepStore>();
+        builder.Services.AddTransient<IEventPublisher, MassTransitEventPublisher>();
+
+        
+        var messageQueueType = Environment.GetEnvironmentVariable("MESSAGE_QUEUE_TYPE") ?? "rabbitMQ";
+
+        if (messageQueueType != "InMemory")
+        {
+            builder.Services.AddMassTransit(x =>
+            {
+                x.SetKebabCaseEndpointNameFormatter();
+
+                // By default, sagas are in-memory, but should be changed to a durable
+                // saga repository.
+                x.SetInMemorySagaRepositoryProvider();
+
+                var entryAssembly = Assembly.GetEntryAssembly();
+
+                x.AddConsumers(entryAssembly);
+                x.AddSagaStateMachines(entryAssembly);
+                x.AddSagas(entryAssembly);
+                x.AddActivities(entryAssembly);
+
+                x.UsingInMemory((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+        }
 
         var app = builder.Build();
 
@@ -40,7 +70,7 @@ public class Program
         }
 
         // app.UseHttpsRedirection();
-        app.MapPost("offers/makeoffer", async ([FromServices] IOfferStore offerStore, [FromServices] ISalesRepStore salesRepStore, [FromBody] NewOfferDto newOffer) =>
+        app.MapPost("offers/makeoffer", async ([FromServices] IOfferStore offerStore, [FromServices] ISalesRepStore salesRepStore, [FromBody] NewOfferDto newOffer, [FromServices] IEventPublisher eventPublisher) =>
         {   
             if (string.IsNullOrWhiteSpace(newOffer.SalesRepId) || string.IsNullOrWhiteSpace(newOffer.Email) || string.IsNullOrWhiteSpace(newOffer.FirstName) || string.IsNullOrWhiteSpace(newOffer.LastName))
             {
@@ -54,6 +84,8 @@ public class Program
             }
 
             var offer = await offerStore.CreateOffer(OfferFactory.NewOffer(newOffer));
+            await eventPublisher.PublishEvent(new NewOfferEvent(offer));
+
             return Results.Ok(offer);
         })
         .WithName("MakeOffer")
@@ -61,6 +93,51 @@ public class Program
 
         app.Run();
     }
+}
+
+public class NewOfferEvent: IEvent
+{
+    public NewOfferEvent()
+    {
+    }
+    
+    public NewOfferEvent(Offer offer): this()
+    {
+        OfferId = offer.OfferId;
+        SalesRepId = offer.SalesRepId;
+        Email = offer.Email;
+        FirstName = offer.FirstName;
+        LastName = offer.LastName;
+        SubmittedOn = offer.SubmittedOn;
+        ModifiedOn = offer.ModifiedOn;
+    }
+
+    public string OfferId {get; set;} = string.Empty;
+    public string SalesRepId {get; set;} = string.Empty;
+    public string Email {get; set;} = string.Empty;
+    public string FirstName {get; set;} = string.Empty;
+    public string LastName {get; set;} = string.Empty;
+    public DateTime SubmittedOn {get; set;} = DateTime.MinValue;
+    public DateTime ModifiedOn {get; set;} = DateTime.MinValue;
+}
+
+public interface IEvent
+{
+}
+
+internal class MassTransitEventPublisher(IBus bus) : IEventPublisher
+{
+    readonly IBus bus = bus;
+
+    public Task PublishEvent<T>(T @event) where T : class
+    {
+        return bus.Publish(@event);
+    }
+}
+
+internal interface IEventPublisher
+{
+    Task PublishEvent<T>(T @event) where T : class;
 }
 
 public record NewOfferDto(string SalesRepId = "", string Email = "", string FirstName = "", string LastName = "");
