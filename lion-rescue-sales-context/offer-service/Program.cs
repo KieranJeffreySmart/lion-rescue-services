@@ -30,7 +30,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddTransient<IOfferStore, EFOfferStore>();
-        builder.Services.AddTransient<ISalesRepStore, EFSalesRepStore>();
+        builder.Services.AddTransient<IMouseStore, EFMouseStore>();
         builder.Services.AddTransient<IEventPublisher, MassTransitEventPublisher>();
 
         
@@ -70,17 +70,17 @@ public class Program
         }
 
         // app.UseHttpsRedirection();
-        app.MapPost("offers/makeoffer", async ([FromServices] IOfferStore offerStore, [FromServices] ISalesRepStore salesRepStore, [FromBody] NewOfferDto newOffer, [FromServices] IEventPublisher eventPublisher) =>
+        app.MapPost("offers/makeoffer", async ([FromServices] IOfferStore offerStore, [FromServices] IMouseStore mouseStore, [FromBody] NewOfferDto newOffer, [FromServices] IEventPublisher eventPublisher) =>
         {   
-            if (string.IsNullOrWhiteSpace(newOffer.SalesRepId) || string.IsNullOrWhiteSpace(newOffer.Email) || string.IsNullOrWhiteSpace(newOffer.FirstName) || string.IsNullOrWhiteSpace(newOffer.LastName))
+            if (string.IsNullOrWhiteSpace(newOffer.MouseId) || string.IsNullOrWhiteSpace(newOffer.Email) || string.IsNullOrWhiteSpace(newOffer.FirstName) || string.IsNullOrWhiteSpace(newOffer.LastName))
             {
-                return Results.BadRequest("SalesRepId, Email, FirstName and LastName are required.");
+                return Results.BadRequest("MouseId, Email, FirstName and LastName are required.");
             }
 
    
-            if ((await salesRepStore.SalesRepExists(newOffer.SalesRepId)) == false)
+            if ((await mouseStore.MouseExists(newOffer.MouseId)) == false)
             {
-                return Results.BadRequest($"SalesRep with ID {newOffer.SalesRepId} does not exist.");
+                return Results.BadRequest($"Mouse with ID {newOffer.MouseId} does not exist.");
             }
 
             var offer = await offerStore.CreateOffer(OfferFactory.NewOffer(newOffer));
@@ -104,7 +104,7 @@ public class NewOfferEvent: IEvent
     public NewOfferEvent(Offer offer): this()
     {
         OfferId = offer.OfferId;
-        SalesRepId = offer.SalesRepId;
+        MouseId = offer.MouseId;
         Email = offer.Email;
         FirstName = offer.FirstName;
         LastName = offer.LastName;
@@ -113,7 +113,7 @@ public class NewOfferEvent: IEvent
     }
 
     public string OfferId {get; set;} = string.Empty;
-    public string SalesRepId {get; set;} = string.Empty;
+    public string MouseId {get; set;} = string.Empty;
     public string Email {get; set;} = string.Empty;
     public string FirstName {get; set;} = string.Empty;
     public string LastName {get; set;} = string.Empty;
@@ -140,7 +140,7 @@ internal interface IEventPublisher
     Task PublishEvent<T>(T @event) where T : class;
 }
 
-public record NewOfferDto(string SalesRepId = "", string Email = "", string FirstName = "", string LastName = "");
+public record NewOfferDto(string MouseId = "", string Email = "", string FirstName = "", string LastName = "");
 
 internal static class OfferFactory
 {
@@ -148,7 +148,7 @@ internal static class OfferFactory
     {
         return new Offer(
             offerId: Guid.NewGuid().ToString(),
-            salesRepId: newOffer.SalesRepId,
+            mouseId: newOffer.MouseId,
             email: newOffer.Email,
             firstName: newOffer.FirstName,
             lastName: newOffer.LastName,

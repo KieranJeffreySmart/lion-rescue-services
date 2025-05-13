@@ -68,11 +68,11 @@
 
 <form class="flex-container" #makeOfferForm="ngForm" id="makeOfferForm" name="makeOfferForm" novalidate ng-submit="makeOfferForm.$valid && submitOffer()">
     <div class="flex-item form-item">
-        <label id="salesRepIdLbl" for="salesRepId">Sales Rep ID:</label>
-        <input required type="text" id="salesRepIdInpt"  name="salesRepId" class="form-control" #salesRepIdInpt="ngModel" placeholder="Sales Rep ID" [(ngModel)]="model.salesRepId" />
-        @if (salesRepIdInpt.invalid && (salesRepIdInpt.dirty || salesRepIdInpt.touched)) {
-          <div id="salesRepIdAlerts" class="alert">
-            @if (salesRepIdInpt.hasError('required')) {
+        <label id="mouseIdLbl" for="mouseId">Sales Rep ID:</label>
+        <input required type="text" id="mouseIdInpt"  name="mouseId" class="form-control" #mouseIdInpt="ngModel" placeholder="Sales Rep ID" [(ngModel)]="model.mouseId" />
+        @if (mouseIdInpt.invalid && (mouseIdInpt.dirty || mouseIdInpt.touched)) {
+          <div id="mouseIdAlerts" class="alert">
+            @if (mouseIdInpt.hasError('required')) {
               <div>
                 Sales Rep ID is required.
               </div>

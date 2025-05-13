@@ -3,9 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
-using MassTransit.Testing;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
 using offer_service;
 using Shouldly;
 
@@ -27,7 +25,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         // Given I have a new offer with valid data
         var newOffer = new NewOfferDto
         {
-            SalesRepId = "SalesRep01",
+            MouseId = "Mouse01",
             Email = "jd@email.com",
             FirstName = "John",
             LastName = "Doe"
@@ -56,7 +54,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
 
         responseBody.ShouldNotBeNull();
         Guid.TryParse(responseBody.OfferId, out Guid _).ShouldBeTrue();
-        responseBody.SalesRepId.ShouldBe("SalesRep01");
+        responseBody.MouseId.ShouldBe("Mouse01");
         responseBody.Email.ShouldBe("jd@email.com");
         responseBody.FirstName.ShouldBe("John");
         responseBody.LastName.ShouldBe("Doe");
@@ -70,16 +68,16 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
     [Theory]
     [InlineData("", "", "", "")]
     [InlineData("", "lion@king.com", "Bob", "DeLeon")]
-    [InlineData("Mabel", "", "Bob", "DeLeon")]
-    [InlineData("Mabel", "lion@king.com", "", "DeLeon")]
-    [InlineData("Mabel", "lion@king.com", "Bob", "")]
-    public async Task ValidateMakeOfferRequiredFields(string salesRepId, string email, string firstName, string lastName)
+    [InlineData("Mouse01", "", "Bob", "DeLeon")]
+    [InlineData("Mouse01", "lion@king.com", "", "DeLeon")]
+    [InlineData("Mouse01", "lion@king.com", "Bob", "")]
+    public async Task ValidateMakeOfferRequiredFields(string mouseId, string email, string firstName, string lastName)
     {
         var client = _factory.CreateClient();
 
         var newOffer = new NewOfferDto
         {
-            SalesRepId = salesRepId,
+            MouseId = mouseId,
             Email = email,
             FirstName = firstName,
             LastName = lastName
@@ -92,13 +90,13 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
     }
 
     [Fact]
-    public async Task ValidateMakeOfferSalesRepExists()
+    public async Task ValidateMakeOfferMouseExists()
     {
         var client = _factory.CreateClient();
 
         var newOffer = new NewOfferDto
         {
-            SalesRepId = "UnknownSalesRepId",
+            MouseId = "UnknownMouseId",
             Email = "jd@email.com",
             FirstName = "John",
             LastName = "Doe"
@@ -111,7 +109,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
 
-    public record OfferDto(string OfferId, string SalesRepId, string Email, string FirstName, string LastName, DateTime SubmittedOn, DateTime ModifiedOn);
+    public record OfferDto(string OfferId, string MouseId, string Email, string FirstName, string LastName, DateTime SubmittedOn, DateTime ModifiedOn);
 }
 
 

@@ -5,7 +5,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "salesRepId": "Mabel1",
+    "mouseId": "Mabel1",
     "email": "bobdeleon@king.com",
     "firstName": "Bob",
     "lastName": "DeLeon"

@@ -1,8 +1,8 @@
 namespace offer_service.SalesContext;
 
-public class SalesRep(string salesRepId, string firstName, string lastName)
+public class Mouse(string mouseId, string firstName, string lastName)
 {
-    public string SalesRepId { get; set; } = salesRepId;
+    public string MouseId { get; set; } = mouseId;
     public string FirstName { get; set; } = firstName;
     public string LastName { get; set; } = lastName;
 }

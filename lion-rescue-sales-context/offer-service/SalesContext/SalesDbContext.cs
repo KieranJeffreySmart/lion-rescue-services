@@ -9,7 +9,7 @@ public class SalesDbContext : DbContext
     }
     
     public DbSet<Offer> Offers { get; set; }
-    public DbSet<SalesRep> SalesReps { get; set; }
+    public DbSet<Mouse> Mouses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,7 +18,7 @@ public class SalesDbContext : DbContext
         modelBuilder.Entity<Offer>().HasData(
             new Offer(
                 offerId: "123",
-                salesRepId: "123",
+                mouseId: "123",
                 email: "jd@email.com",
                 firstName: "John",
                 lastName: "Doe",
@@ -27,11 +27,11 @@ public class SalesDbContext : DbContext
             )
         );
         
-        modelBuilder.Entity<SalesRep>().HasKey(x => x.SalesRepId);
+        modelBuilder.Entity<Mouse>().HasKey(x => x.MouseId);
 
-        modelBuilder.Entity<SalesRep>().HasData(
-            new SalesRep(
-                salesRepId: "SalesRep01",
+        modelBuilder.Entity<Mouse>().HasData(
+            new Mouse(
+                mouseId: "Mouse01",
                 firstName: "Mabel",
                 lastName: "DeMouse"
             )
