@@ -11,7 +11,7 @@ public class EFMouseStore : IMouseStore
 
     public async Task<Mouse> GetMouse(string mouseId)
     {
-        return await _dbContext.Mouses.FindAsync(mouseId) ?? throw new Exception("Sales Rep not found");;
+        return await _dbContext.Mouses.FindAsync(mouseId) ?? throw new Exception("Mouse not found");;
     }
 
     public async Task<Mouse> CreateMouse(Mouse mouse)

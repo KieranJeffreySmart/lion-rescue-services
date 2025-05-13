@@ -32,9 +32,9 @@ describe('NewOfferFormComponent', () => {
   
   it('should have the basic form elements', <any>fakeAsync(() => {
 
-    expect(compiled.querySelector('label#mouseIdLbl')?.textContent).toContain('Sales Rep ID');
+    expect(compiled.querySelector('label#mouseIdLbl')?.textContent).toContain('Mouse ID');
     let mouseIdInput = compiled.querySelector('input#mouseIdInpt') as HTMLInputElement 
-    expect(mouseIdInput?.getAttribute('placeholder')).toContain('Sales Rep ID');
+    expect(mouseIdInput?.getAttribute('placeholder')).toContain('Mouse ID');
     expect(mouseIdInput?.getAttribute('type')).toContain('text');
 
     expect(compiled.querySelector('label#emailLbl')?.textContent).toContain('Email');
@@ -108,7 +108,7 @@ describe('NewOfferFormComponent', () => {
     mouseIdAlerts = compiled.querySelector('div#mouseIdAlerts') as HTMLInputElement 
     expect(mouseIdAlerts).toBeTruthy();
     expect(mouseIdAlerts.children.length).toEqual(1);
-    expect(mouseIdAlerts.children[0].textContent).toContain("Sales Rep ID is required");
+    expect(mouseIdAlerts.children[0].textContent).toContain("Mouse ID is required");
 
     emailInput.value = "";
     emailInput.dispatchEvent(new Event('input'));

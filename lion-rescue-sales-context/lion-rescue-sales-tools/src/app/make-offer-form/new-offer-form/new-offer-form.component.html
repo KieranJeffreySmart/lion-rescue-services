@@ -68,13 +68,13 @@
 
 <form class="flex-container" #makeOfferForm="ngForm" id="makeOfferForm" name="makeOfferForm" novalidate ng-submit="makeOfferForm.$valid && submitOffer()">
     <div class="flex-item form-item">
-        <label id="mouseIdLbl" for="mouseId">Sales Rep ID:</label>
-        <input required type="text" id="mouseIdInpt"  name="mouseId" class="form-control" #mouseIdInpt="ngModel" placeholder="Sales Rep ID" [(ngModel)]="model.mouseId" />
+        <label id="mouseIdLbl" for="mouseId">Mouse ID:</label>
+        <input required type="text" id="mouseIdInpt"  name="mouseId" class="form-control" #mouseIdInpt="ngModel" placeholder="Mouse ID" [(ngModel)]="model.mouseId" />
         @if (mouseIdInpt.invalid && (mouseIdInpt.dirty || mouseIdInpt.touched)) {
           <div id="mouseIdAlerts" class="alert">
             @if (mouseIdInpt.hasError('required')) {
               <div>
-                Sales Rep ID is required.
+                Mouse ID is required.
               </div>
             }
           </div>
@@ -159,6 +159,6 @@
     <p>{{offerDetails}}</p>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="pill" (click)="cancelSubmit()">Cancel</button>
+		<button type="button" class="pill" (click)="cancelSubmit()">Close</button>
 	</div>          
 </ng-template>
