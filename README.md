@@ -38,7 +38,7 @@ The full diagram includes notifications, this helps to understand the difference
 ![image](MakeAnOffer-Boris.jpg)
 
 This version of the Boris diagram has had policies and commands removed in an effort to make it more readable
-![image](MakeAnOffer-Boris.jpg)
+![image](MakeAnOffer-FilteredBoris.jpg)
 
 #### The SNAP
 This is a table of responsibilities for each object in the business process and provides a template for implementing applications
