@@ -62,6 +62,7 @@ public class IntegrationTestMakeOffer: IClassFixture<CustomWebApplicationFactory
         responseBody.SubmittedOn.ShouldBeGreaterThan(beforeRequest);
 
         // And a new offer event should be raised
+        Thread.Sleep(1000); // Wait for the event to be processed
         _factory.NewOfferEventList.GetAll().ShouldNotBeEmpty();
     }
 
