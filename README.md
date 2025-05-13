@@ -16,13 +16,17 @@ The Mouse knew the voice and quickly found the Lion struggling in the net. Runni
 "You laughed when I said I would repay you," said the Mouse. "Now you see that even a Mouse can help a Lion.*   
 
 ## Hypotheses
-If the Mouse had an application to track deals made with Lions   
-They could offer the service to many lions,   
+If other Mice had an survival guide
+They could use the guide to survive the threat from a Lion,   
 Increasing their chances of survival by 200%  
 
+If the Mouse had an application to track deals made with Lions   
+They could offer the service to many lions,   
+Increasing their chances of survival by 200%
+
 If the lion had an application to notify the mouse they are trapped   
-The lion has an effective way of requesting help,    
-Increasing the chance of a Lions survival by 200%    
+The lion has an effective way of requesting help,
+Increasing the chance of a Lions survival by 200%
 
 ## Results of EventStorming:
 **_NOTE:_** The model is a "work in progress" as I discover more about the application through implementation I might return to this model to update it before making large changes

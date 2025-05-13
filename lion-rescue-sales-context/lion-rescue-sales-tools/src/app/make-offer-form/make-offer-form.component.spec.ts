@@ -54,7 +54,7 @@ describe('MakeOfferFormComponent', () => {
     windowEl = compiled.querySelector('ngb-popover-window');
     //TODO: Get this working -- expect(windowEl).toBeNull();
     
-    let newOfferForm = compiled.querySelector('form#makeOfferForm') as HTMLButtonElement;
+    let newOfferForm = compiled.querySelector('form#makeOfferForm') as HTMLElement;
     expect(newOfferForm).toBeTruthy();
   }));
 });
