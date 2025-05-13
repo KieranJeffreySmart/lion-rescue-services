@@ -48,5 +48,8 @@ This version of the Boris diagram has had policies and commands removed in an ef
 This is a table of responsibilities for each object in the business process and provides a template for implementing applications
 ![image](MakeAnOffer-SNAP.jpg)
 
+## Stories
+[Survive a Threat Guide](/SurviveAThreatGuide.md)
+
 ## Lion Rescue Sales Context
 This context will be where we implement the logic for initiating a sale of rescue services
